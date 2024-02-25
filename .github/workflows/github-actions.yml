@@ -17,8 +17,11 @@ jobs:
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
+          envs: CLEMONARTE_BACKEND_URL, BACKEND_PORT, MONGO_URL
           script: |
-            echo "back url ${CLEMONARTE_BACKEND_URL}"
+            echo "CLEMONARTE_BACKEND_URL : ${CLEMONARTE_BACKEND_URL}"
+            echo "BACKEND_PORT : ${BACKEND_PORT}"
+            echo "MONGO_URL : ${MONGO_URL}"
             pwd
             if [ ! -d "./Clemonarte-backend" ]
             then
