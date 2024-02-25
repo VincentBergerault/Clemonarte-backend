@@ -18,7 +18,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            echo "back url ${CLEMONARTE_BACKEND_URL}""
+            echo "back url ${CLEMONARTE_BACKEND_URL}"
             pwd
             if [ ! -d "./Clemonarte-backend" ]
             then
