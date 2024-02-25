@@ -1,0 +1,28 @@
+name: Deploy
+on: push
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: launch Docker-compose
+        uses: appleboy/ssh-action@master
+        env:
+          CLEMONARTE_BACKEND_URL: ${{ env.CLEMONARTE_BACKEND_URL }}
+          BACKEND_PORT: ${{ env.BACKEND_PORT }}
+          MONGO_URL: ${{ env.MONGO_URL }}
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            pwd
+            if [ ! -d "./Clemonarte-backend" ]
+            then
+              git clone git@github.com:VincentBergerault/Clemonarte-backend.git
+            fi
+            cd Clemonarte-backend
+            git pull origin main
+            docker-compose up -d --build --force-recreate
