@@ -7,7 +7,7 @@ services:
     container_name: clemonarte_backend
     restart: unless-stopped
     ports:
-      - ${BACKEND_PORT}:${BACKEND_PORT}
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
     networks:
         - traefik_network
     environment:
