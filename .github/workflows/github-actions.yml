@@ -9,9 +9,9 @@ jobs:
       - name: launch Docker-compose
         uses: appleboy/ssh-action@master
         env:
-          CLEMONARTE_BACKEND_URL: ${{ env.CLEMONARTE_BACKEND_URL }}
-          BACKEND_PORT: ${{ env.BACKEND_PORT }}
-          MONGO_URL: ${{ env.MONGO_URL }}
+          CLEMONARTE_BACKEND_URL: ${{ vars.CLEMONARTE_BACKEND_URL }}
+          BACKEND_PORT: ${{ vars.BACKEND_PORT }}
+          MONGO_URL: ${{ vars.MONGO_URL }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
