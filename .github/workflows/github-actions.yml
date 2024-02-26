@@ -10,18 +10,18 @@ jobs:
         uses: appleboy/ssh-action@master
         env:
           CLEMONARTE_BACKEND_URL: ${{ vars.CLEMONARTE_BACKEND_URL }}
-          BACKEND_PORT: ${{ vars.BACKEND_PORT }}
+          PORT: ${{ vars.PORT }}
           MONGO_URL: ${{ vars.MONGO_URL }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
-          envs: CLEMONARTE_BACKEND_URL, BACKEND_PORT, MONGO_URL
+          envs: CLEMONARTE_BACKEND_URL, PORT, MONGO_URL
           script: |
-            echo "CLEMONARTE_BACKEND_URL : ${CLEMONARTE_BACKEND_URL}"
-            echo "BACKEND_PORT : ${BACKEND_PORT}"
-            echo "MONGO_URL : ${MONGO_URL}"
+            echo "CLEMONARTE_BACKEND_URL : ${{CLEMONARTE_BACKEND_URL}}"
+            echo "PORT : ${{PORT}}"
+            echo "MONGO_URL : ${{MONGO_URL}}"
             pwd
             if [ ! -d "./Clemonarte-backend" ]
             then

@@ -2,23 +2,22 @@ version: "3"
 services:
   clemonarte_backend:
     build:
-      context: ./
-      dockerfile: ./Dockerfile
+      context: .
     container_name: clemonarte_backend
     restart: unless-stopped
     ports:
-      - "${BACKEND_PORT}:${BACKEND_PORT}"
+      - "${PORT}:${PORT}"
     networks:
         - traefik_network
     environment:
-      - BACKEND_PORT=${BACKEND_PORT}
+      - PORT=${PORT}
       - MONGO_URL=${MONGO_URL}
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik_network"
       - "traefik.http.routers.todo_backend.entrypoints=web,websecure"
       - "traefik.http.routers.todo_backend.rule=Host(`${CLEMONARTE_BACKEND_URL}`)"
-      - "traefik.http.services.todo_backend.loadbalancer.server.port=${BACKEND_PORT}"
+      - "traefik.http.services.todo_backend.loadbalancer.server.port=${PORT}"
       - "traefik.http.routers.todo_backend.tls=true"
       - "traefik.http.routers.todo_backend.tls.certresolver=leresolver"
 networks:

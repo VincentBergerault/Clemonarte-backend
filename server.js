@@ -36,8 +36,8 @@ app.get("/healthcheck", (req, res) => {
   res.json({ message: "OK - " + Date.now() });
 });
 
-app.listen(process.env.BACKEND_PORT, () => {
+app.listen(process.env.PORT, () => {
   console.log(
-    `Server started on http://localhost:${process.env.BACKEND_PORT}`
+    `Server started on http://localhost:${process.env.PORT}`
   );
 });

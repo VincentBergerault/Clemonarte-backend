@@ -6,5 +6,5 @@ RUN npm install
 
 COPY . .
 
-EXPOSE $BACKEND_PORT
+EXPOSE $PORT
 CMD ["npm", "run", "start"]
