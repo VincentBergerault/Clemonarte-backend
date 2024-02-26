@@ -19,9 +19,9 @@ jobs:
           port: ${{ secrets.PORT }}
           envs: CLEMONARTE_BACKEND_URL, PORT, MONGO_URL
           script: |
-            echo "CLEMONARTE_BACKEND_URL : ${{CLEMONARTE_BACKEND_URL}}"
-            echo "PORT : ${{PORT}}"
-            echo "MONGO_URL : ${{MONGO_URL}}"
+            echo "CLEMONARTE_BACKEND_URL : $CLEMONARTE_BACKEND_URL"
+            echo "PORT : $PORT"
+            echo "MONGO_URL : $MONGO_URL"
             pwd
             if [ ! -d "./Clemonarte-backend" ]
             then
