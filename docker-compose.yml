@@ -15,11 +15,11 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik_network"
-      - "traefik.http.routers.todo_backend.entrypoints=web,websecure"
-      - "traefik.http.routers.todo_backend.rule=Host(`${CLEMONARTE_BACKEND_URL}`)"
-      - "traefik.http.services.todo_backend.loadbalancer.server.port=${PORT}"
-      - "traefik.http.routers.todo_backend.tls=true"
-      - "traefik.http.routers.todo_backend.tls.certresolver=leresolver"
+      - "traefik.http.routers.clemonarte_backend.entrypoints=web,websecure"
+      - "traefik.http.routers.clemonarte_backend.rule=Host(`${CLEMONARTE_BACKEND_URL}`)"
+      - "traefik.http.services.clemonarte_backend.loadbalancer.server.port=${PORT}"
+      - "traefik.http.routers.clemonarte_backend.tls=true"
+      - "traefik.http.routers.clemonarte_backend.tls.certresolver=leresolver"
 networks:
   traefik_network:
     external: true
