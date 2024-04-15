@@ -15,20 +15,22 @@ const productRoutes = require("./controllers/product");
 
 indexDB();
 
+const CLEMONARTE_FRONTEND_URL = "https://clemonarte.vbergerault.com"
+
 const app = express();
 app.use(express.json());
 app.use(morgan("combined"));
 app.use(cookieParser());
-// app.use(
-//   cors({
-//     origin:
-//       process.env.VUE_APP_DEV === "true"
-//         ? ["http://localhost:5010", "http://localhost:8080"]
-//         : "https://" + process.env.VUE_APP_TODO_URL,
-//     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-//     credentials: true,
-//   })
-// );
+ app.use(
+   cors({
+    origin:
+      process.env.DEV === "true"
+        ? ["http://localhost:8090"]
+        : CLEMONARTE_FRONTEND_URL,
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true,
+  })
+);
 
 app.use("/api/product", productRoutes);
 
