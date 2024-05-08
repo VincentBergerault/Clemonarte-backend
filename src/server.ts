@@ -1,28 +1,24 @@
-const express = require("express");
-const cors = require("cors");
-var morgan = require('morgan')
-//var history = require("connect-history-api-fallback");
-
-const cookieParser = require("cookie-parser");
-const indexDB = require("./indexDB");
+import express from "express";
+import cors from "cors";
+import morgan from "morgan";
+import cookieParser from "cookie-parser";
+import connect from "./indexDB"; // Ensure this path is correct
 // const { login, isAuthenticated } = require("./Middleware/Authentication");
 require("dotenv").config();
 
-const productRoutes = require("./controllers/product");
-// const taskRoutes = require("./Controllers/Task");
+import productRoutes from "./controllers/product.router";
+import contactRoutes from "./controllers/contact.router";
 
-// const path = __dirname + "/app/views/";
+const CLEMONARTE_FRONTEND_URL = "https://clemonarte.vbergerault.com";
 
-indexDB();
-
-const CLEMONARTE_FRONTEND_URL = "https://clemonarte.vbergerault.com"
+connect();
 
 const app = express();
 app.use(express.json());
 app.use(morgan("combined"));
 app.use(cookieParser());
- app.use(
-   cors({
+app.use(
+  cors({
     origin:
       process.env.DEV === "true"
         ? ["http://localhost:8090"]
@@ -33,13 +29,12 @@ app.use(cookieParser());
 );
 
 app.use("/api/product", productRoutes);
+app.use("/api/contact", contactRoutes);
 
 app.get("/healthcheck", (req, res) => {
   res.json({ message: "OK - " + Date.now() });
 });
 
 app.listen(process.env.PORT, () => {
-  console.log(
-    `Server started on http://localhost:${process.env.PORT}`
-  );
+  console.log(`Server started on http://localhost:${process.env.PORT}`);
 });
