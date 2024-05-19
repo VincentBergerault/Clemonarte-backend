@@ -6,8 +6,8 @@ import connect from "./indexDB"; // Ensure this path is correct
 // const { login, isAuthenticated } = require("./Middleware/Authentication");
 require("dotenv").config();
 
-import productRoutes from "./controllers/product.router";
-import contactRoutes from "./controllers/contact.router";
+import productRoutes from "./controllers/product";
+import contactRoutes from "./controllers/contact";
 
 const CLEMONARTE_FRONTEND_URL = "https://clemonarte.vbergerault.com";
 
