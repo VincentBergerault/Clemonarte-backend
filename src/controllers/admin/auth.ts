@@ -1,6 +1,6 @@
 import express, { Request, Response, Router } from "express";
 import { IUser } from "../../utils/types";
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const router: Router = express.Router();
@@ -20,15 +20,13 @@ const users: IUser[] = [
   },
 ];
 
-// Get all items
-
 router.post("/login", async (req: Request, res: Response) => {
   const { username, password } = req.body as {
     username: string;
     password: string;
   };
   const user = users.find((u) => u.username === username);
-  if (!user || !(await bcrypt.compare(password, user.password))) {
+  if (!user || password !== user.password) {
     return res.status(401).send("Invalid credentials");
   }
   const token = generateToken(user.id);
@@ -44,7 +42,7 @@ router.post("/login", async (req: Request, res: Response) => {
 });
 
 router.get("/verify-token", (req, res) => {
-  const token = req.cookies.AUTH;
+  const token = req.cookies.CLEMONARTE_TOKEN;
   if (!token) {
     return res.status(401).send("Unauthorized");
   }
@@ -62,4 +60,4 @@ router.get("/logout", (req: Request, res: Response) => {
   res.json({ message: "Logged out" });
 });
 
-module.exports = router;
+export default router;

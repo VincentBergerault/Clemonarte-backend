@@ -3,9 +3,7 @@ require("dotenv").config();
 
 const connect = (): void => {
   mongoose.set("strictQuery", false);
-  mongoose.connect(process.env.MONGO_URL, {
-    useUnifiedTopology: true,
-  });
+  mongoose.connect(process.env.MONGO_URL);
 
   const db = mongoose.connection;
   db.on("error", console.error.bind(console, "connection error:"));
