@@ -12,12 +12,13 @@ jobs:
           CLEMONARTE_BACKEND_URL: ${{ vars.CLEMONARTE_BACKEND_URL }}
           PORT: ${{ vars.PORT }}
           MONGO_URL: ${{ vars.MONGO_URL }}
+          PROD: true
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
-          envs: CLEMONARTE_BACKEND_URL, PORT, MONGO_URL
+          envs: CLEMONARTE_BACKEND_URL, PORT, MONGO_URL, PROD
           script: |
             echo "CLEMONARTE_BACKEND_URL : $CLEMONARTE_BACKEND_URL"
             echo "PORT : $PORT"
