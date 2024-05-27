@@ -7,7 +7,7 @@ require("dotenv").config();
 
 import productRoutes from "./controllers/product";
 import contactRoutes from "./controllers/contact";
-import authRoutes from "./controllers/admin/auth";
+import adminRoutes from "./controllers/admin.routes";
 
 const CLEMONARTE_FRONTEND_URL = "https://clemonarte.vbergerault.com";
 
@@ -26,10 +26,10 @@ app.use(
   })
 );
 
+app.use("/admin", adminRoutes);
+
 app.use("/api/product", productRoutes);
 app.use("/api/contact", contactRoutes);
-app.use("/admin", authRoutes);
-
 app.get("/healthcheck", (req, res) => {
   res.json({ message: "OK - " + Date.now() });
 });

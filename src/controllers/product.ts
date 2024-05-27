@@ -1,6 +1,6 @@
 import express, { Request, Response, Router } from "express";
 import ProductModel from "../models/product.model"; // Assuming default export is used in the model
-import { Product } from "../utils/types";
+import { clientProduct, Product } from "../utils/types";
 
 const router: Router = express.Router();
 
@@ -8,7 +8,18 @@ const router: Router = express.Router();
 router.get("/", async (req: Request, res: Response) => {
   try {
     const items = (await ProductModel.find({})) as Array<Product>;
-    items.filter((item) => item.visible === true);
+
+    // const filterItems = items
+    //   .filter((item) => item.visible === true)
+    //   .map((obj) =>
+    //     ["name", "price"].reduce((newObj: clientProduct, key: string) => {
+    //       if (obj.hasOwnProperty(key)) {
+    //         newObj[key] = obj[key];
+    //       }
+    //       return newObj;
+    //     }, {})
+    //   );
+
     res.json(items);
   } catch (error: any) {
     // Consider defining a more specific error type

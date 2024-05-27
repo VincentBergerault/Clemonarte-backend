@@ -9,7 +9,7 @@ describe("Admin scenario: login, verify token, logout", () => {
 
   it("should login as admin", async () => {
     await request(app)
-      .post("/admin/login")
+      .post("/admin/auth/login")
       .send({ username: testusername, password: "testpwd" })
       .then((response) => {
         expect(response.status).toBe(200);
@@ -22,7 +22,7 @@ describe("Admin scenario: login, verify token, logout", () => {
 
   it("should verify the token from the cookie", async () => {
     await request(app)
-      .get("/admin/verify-token")
+      .get("/admin/auth/verify-token")
       .set("Cookie", cookie)
       .then((response) => {
         expect(response.status).toBe(200);
@@ -34,7 +34,7 @@ describe("Admin scenario: login, verify token, logout", () => {
 
   it("should log out the user and clear the cookie", async () => {
     await request(app)
-      .get("/admin/logout")
+      .get("/admin/auth/logout")
       .set("Cookie", cookie)
       .then((response) => {
         expect(response.status).toBe(200);
@@ -49,7 +49,7 @@ describe("Admin scenario: login, verify token, logout", () => {
 
   it("should try to verify a token but fail", async () => {
     await request(app)
-      .get("/admin/verify-token")
+      .get("/admin/auth/verify-token")
       .set("Cookie", cookie)
       .then((response) => {
         expect(response.status).toBe(401);

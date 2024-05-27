@@ -1,37 +1,21 @@
 import express, { Request, Response, Router } from "express";
 import { IUser } from "../../utils/types";
-import { userInfo } from "os";
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+import getUsers from "../../config/users";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const router: Router = express.Router();
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET as string;
 const ADMIN_LOGIN = process.env.ADMIN_LOGIN as string;
 const ADMIN_PWD = process.env.ADMIN_PWD as string;
 const COOKIE_NAME = process.env.COOKIE_NAME as string;
 
 const generateToken = (data: any) => {
-  return jwt.sign({ data }, JWT_SECRET, { expiresIn: "30d" });
+  return jwt.sign({ data }, JWT_SECRET, { expiresIn: "1d" });
 };
 
-const users: IUser[] = process.env.PROD
-  ? [
-      {
-        id: 19749871374,
-        username: ADMIN_LOGIN,
-        password: ADMIN_PWD, // This should be a hashed password
-        role: "admin",
-      },
-    ]
-  : [
-      {
-        id: 1,
-        username: "testlogin",
-        password: "testpwd", // This should be a hashed password
-        role: "admin",
-      },
-    ];
+const users: IUser[] = getUsers();
 
 router.post("/login", async (req: Request, res: Response) => {
   const { username, password } = req.body as {
@@ -39,9 +23,15 @@ router.post("/login", async (req: Request, res: Response) => {
     password: string;
   };
   const user = users.find((u) => u.username === username);
-  if (!user || password !== user.password) {
+  if (!user) {
     return res.status(401).send("Invalid credentials");
   }
+
+  const validPassword = await bcrypt.compare(password, user.password);
+  if (!validPassword) {
+    return res.status(401).send("Invalid credentials");
+  }
+
   const token = generateToken({ userID: user.id, username: username });
 
   res.cookie(COOKIE_NAME, token, {
@@ -54,7 +44,7 @@ router.post("/login", async (req: Request, res: Response) => {
   res.json({ message: "Logged in!" });
 });
 
-router.get("/verify-token", (req, res) => {
+router.get("/verify-token", (req: Request, res: Response) => {
   const token = req.cookies[COOKIE_NAME];
   if (!token) {
     return res.status(401).send("Unauthorized");
@@ -76,7 +66,12 @@ router.get("/verify-token", (req, res) => {
 });
 
 router.get("/logout", (req: Request, res: Response) => {
-  res.cookie(COOKIE_NAME, "", { maxAge: 1 }); // Clear the cookie by setting expiration to 1ms
+  res.cookie(COOKIE_NAME, "", {
+    maxAge: 1,
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+  });
   res.json({ message: "Logged out" });
 });
 

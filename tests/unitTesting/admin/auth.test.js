@@ -10,14 +10,14 @@ jest.mock("jsonwebtoken");
 describe("Auth routes", () => {
   const testusername = "testlogin";
 
-  describe("POST /admin/login", () => {
+  describe("POST /admin/auth/login", () => {
     it("should login successfully with valid credentials", async () => {
       const jwtSignSpy = jest
         .spyOn(jwt, "sign")
         .mockReturnValue("mocked_token");
 
       await request(app)
-        .post("/admin/login")
+        .post("/admin/auth/login")
         .send({ username: testusername, password: "testpwd" })
         .then((response) => {
           expect(response.status).toBe(200);
@@ -32,7 +32,7 @@ describe("Auth routes", () => {
 
     it("should return 401 for invalid credentials", async () => {
       await request(app)
-        .post("/admin/login")
+        .post("/admin/auth/login")
         .send({ username: testusername, password: "wrongpassword" })
         .then((response) => {
           expect(response.status).toBe(401);
@@ -50,7 +50,7 @@ describe("Auth routes", () => {
         );
 
       await request(app)
-        .get("/admin/verify-token")
+        .get("/admin/auth/verify-token")
         .set("Cookie", `${COOKIE_NAME}=valid_token`)
         .then((response) => {
           expect(response.status).toBe(200);
@@ -63,7 +63,7 @@ describe("Auth routes", () => {
 
     it("should return 401 for missing token", async () => {
       await request(app)
-        .get("/admin/verify-token")
+        .get("/admin/auth/verify-token")
         .then((response) => {
           expect(response.status).toBe(401);
           expect(response.text).toBe("Unauthorized");
@@ -77,7 +77,7 @@ describe("Auth routes", () => {
           callback(new Error("Invalid token"))
         );
       await request(app)
-        .get("/admin/verify-token")
+        .get("/admin/auth/verify-token")
         .set("Cookie", `${COOKIE_NAME}=invalid_token`)
         .then((response) => {
           expect(response.status).toBe(401);
@@ -90,7 +90,7 @@ describe("Auth routes", () => {
   describe("GET /logout", () => {
     it("should logout successfully", async () => {
       await request(app)
-        .get("/admin/logout")
+        .get("/admin/auth/logout")
         .then((response) => {
           expect(response.status).toBe(200);
           expect(response.body.message).toBe("Logged out");
