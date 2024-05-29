@@ -25,6 +25,7 @@ app.use(
     credentials: true,
   })
 );
+app.use(express.static("../public"));
 
 app.use("/admin", adminRoutes);
 

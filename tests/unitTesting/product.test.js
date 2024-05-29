@@ -23,24 +23,25 @@ describe("User product routes", () => {
         authorDescription: "aaaa",
         materials: ["paint", "canvas"],
       });
-      const product3 = new ProductModel({
-        name: "oeuvre3",
-        price: 3,
-        src: "src3",
-        visible: false,
-        description: "aaaa",
-        authorDescription: "aaaa",
-        materials: ["paint", "canvas"],
-      });
 
       await product1.save();
       await product2.save();
-      await product3.save();
 
       await request(app)
         .get("/api/product")
         .then((response) => {
           expect(response.status).toBe(200);
+          expect(Array.isArray(response.body)).toBe(true);
+          expect(response.body.length).toBe(1);
+          response.body.forEach((item) => {
+            expect(item).toMatchObject({
+              name: expect.any(String),
+              price: expect.any(Number),
+              src: expect.any(String),
+              description: expect.any(String),
+              materials: expect.arrayContaining([expect.any(String)]),
+            });
+          });
         });
     });
   });

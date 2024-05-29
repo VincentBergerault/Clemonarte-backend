@@ -15,7 +15,7 @@ export type Product = {
   materials: Array<string>;
 };
 
-export type clientProduct = {
+export type ClientProduct = {
   name: string;
   price: number;
   src: string;

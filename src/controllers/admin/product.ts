@@ -1,7 +1,11 @@
 import { Router, Request, Response } from "express";
+import multer from "multer";
+import { storage } from "../../config/storage";
 import ProductModel from "../../models/product.model"; // Ensure this is correctly typed in your model file
 
 const router: Router = Router();
+
+const upload = multer({ storage });
 
 // Get all items
 router.get("/", async (req: Request, res: Response) => {
@@ -14,21 +18,31 @@ router.get("/", async (req: Request, res: Response) => {
 });
 
 // Add an item
-router.post("/", async (req: Request, res: Response) => {
-  try {
-    // Create a new product instance using the request body
-    const newProduct = new ProductModel(req.body);
+router.post(
+  "/",
+  upload.single("image"),
+  async (req: Request, res: Response) => {
+    try {
+      const { body } = req;
+      const image = req.file ? req.file.path : null;
 
-    // Save the new product to the database
-    await newProduct.save();
+      // Create a new product instance using the request body
+      const newProduct = new ProductModel({
+        ...body,
+        src: image,
+      });
 
-    // Send back the newly created product
-    res.status(201).json(newProduct);
-  } catch (error: any) {
-    // Handle errors, for instance if there are validation errors
-    res.status(500).json({ error: error.message });
+      // Save the new product to the database
+      await newProduct.save();
+
+      // Send back the newly created product
+      res.status(201).json(newProduct);
+    } catch (error: any) {
+      // Handle errors, for instance if there are validation errors
+      res.status(500).json({ error: error.message });
+    }
   }
-});
+);
 
 // Update an item
 router.patch("/:id", async (req: Request, res: Response) => {

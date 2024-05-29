@@ -53,7 +53,7 @@ describe("Admin scenario: login, verify token, logout", () => {
       .set("Cookie", cookie)
       .then((response) => {
         expect(response.status).toBe(401);
-        expect(response.text).toBe("Unauthorized");
+        expect(response.body).toHaveProperty("message", "Unauthorized");
       });
   });
 });

@@ -24,12 +24,12 @@ router.post("/login", async (req: Request, res: Response) => {
   };
   const user = users.find((u) => u.username === username);
   if (!user) {
-    return res.status(401).send("Invalid credentials");
+    return res.status(401).send({ message: "Invalid credentials" });
   }
 
   const validPassword = await bcrypt.compare(password, user.password);
   if (!validPassword) {
-    return res.status(401).send("Invalid credentials");
+    return res.status(401).send({ message: "Invalid credentials" });
   }
 
   const token = generateToken({ userID: user.id, username: username });
@@ -47,15 +47,15 @@ router.post("/login", async (req: Request, res: Response) => {
 router.get("/verify-token", (req: Request, res: Response) => {
   const token = req.cookies[COOKIE_NAME];
   if (!token) {
-    return res.status(401).send("Unauthorized");
+    return res.status(401).send({ message: "Unauthorized" });
   }
 
   jwt.verify(token, JWT_SECRET, (err: any, decoded: any) => {
     if (err) {
-      return res.status(401).send("Unauthorized");
+      return res.status(401).send({ message: "Unauthorized" });
     }
     if (!users.find((u) => u.id === decoded.data.userID)) {
-      return res.status(401).send("Unauthorized");
+      return res.status(401).send({ message: "Unauthorized" });
     }
 
     res.json({

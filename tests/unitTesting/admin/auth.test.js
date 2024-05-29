@@ -21,7 +21,7 @@ describe("Auth routes", () => {
         .send({ username: testusername, password: "testpwd" })
         .then((response) => {
           expect(response.status).toBe(200);
-          expect(response.body.message).toBe("Logged in!");
+          expect(response.body).toHaveProperty("message", "Logged in!");
           expect(response.headers["set-cookie"][0]).toContain(
             `${COOKIE_NAME}=mocked_token`
           );
@@ -36,7 +36,10 @@ describe("Auth routes", () => {
         .send({ username: testusername, password: "wrongpassword" })
         .then((response) => {
           expect(response.status).toBe(401);
-          expect(response.text).toBe("Invalid credentials");
+          expect(response.body).toHaveProperty(
+            "message",
+            "Invalid credentials"
+          );
         });
     });
   });
@@ -66,7 +69,7 @@ describe("Auth routes", () => {
         .get("/admin/auth/verify-token")
         .then((response) => {
           expect(response.status).toBe(401);
-          expect(response.text).toBe("Unauthorized");
+          expect(response.body).toHaveProperty("message", "Unauthorized");
         });
     });
 
@@ -81,7 +84,7 @@ describe("Auth routes", () => {
         .set("Cookie", `${COOKIE_NAME}=invalid_token`)
         .then((response) => {
           expect(response.status).toBe(401);
-          expect(response.text).toBe("Unauthorized");
+          expect(response.body).toHaveProperty("message", "Unauthorized");
         });
       jwtVerifySpy.mockRestore();
     });
@@ -93,7 +96,7 @@ describe("Auth routes", () => {
         .get("/admin/auth/logout")
         .then((response) => {
           expect(response.status).toBe(200);
-          expect(response.body.message).toBe("Logged out");
+          expect(response.body).toHaveProperty("message", "Logged out");
           expect(response.headers["set-cookie"][0]).toContain(
             `${COOKIE_NAME}=;`
           );

@@ -12,6 +12,8 @@ services:
     environment:
       - PORT=${PORT}
       - MONGO_URL=${MONGO_URL}
+    volumes:
+      - clemonarte-images:/usr/myapp/public
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik_network"
@@ -23,3 +25,7 @@ services:
 networks:
   traefik_network:
     external: true
+
+volumes:
+  clemonarte-images:
+    driver: local
