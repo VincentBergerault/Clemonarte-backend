@@ -30,10 +30,23 @@ describe("Auth routes", () => {
       jwtSignSpy.mockRestore();
     });
 
-    it("should return 401 for invalid credentials", async () => {
+    it("should return 401 for invalid password", async () => {
       await request(app)
         .post("/admin/auth/login")
         .send({ username: testusername, password: "wrongpassword" })
+        .then((response) => {
+          expect(response.status).toBe(401);
+          expect(response.body).toHaveProperty(
+            "message",
+            "Invalid credentials"
+          );
+        });
+    });
+
+    it("should return 401 for invalid user", async () => {
+      await request(app)
+        .post("/admin/auth/login")
+        .send({ username: "wrongUser", password: "wrongpassword" })
         .then((response) => {
           expect(response.status).toBe(401);
           expect(response.body).toHaveProperty(
@@ -61,6 +74,7 @@ describe("Auth routes", () => {
           expect(response.body).toHaveProperty("user");
           expect(response.body.user).toHaveProperty("username", testusername);
         });
+
       jwtVerifySpy.mockRestore();
     });
 
@@ -79,6 +93,7 @@ describe("Auth routes", () => {
         .mockImplementation((token, secret, callback) =>
           callback(new Error("Invalid token"))
         );
+
       await request(app)
         .get("/admin/auth/verify-token")
         .set("Cookie", `${COOKIE_NAME}=invalid_token`)
@@ -86,6 +101,25 @@ describe("Auth routes", () => {
           expect(response.status).toBe(401);
           expect(response.body).toHaveProperty("message", "Unauthorized");
         });
+
+      jwtVerifySpy.mockRestore();
+    });
+
+    it("should return 401 for invalid token because user not found", async () => {
+      const jwtVerifySpy = jest
+        .spyOn(jwt, "verify")
+        .mockImplementation((token, secret, callback) =>
+          callback(null, { data: { userID: 999999, username: testusername } })
+        );
+
+      await request(app)
+        .get("/admin/auth/verify-token")
+        .set("Cookie", `${COOKIE_NAME}=invalid_token`)
+        .then((response) => {
+          expect(response.status).toBe(401);
+          expect(response.body).toHaveProperty("message", "Unauthorized");
+        });
+
       jwtVerifySpy.mockRestore();
     });
   });

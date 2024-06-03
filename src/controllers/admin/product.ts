@@ -2,6 +2,7 @@ import { Router, Request, Response } from "express";
 import multer from "multer";
 import { storage } from "../../config/storage";
 import ProductModel from "../../models/product.model"; // Ensure this is correctly typed in your model file
+import fs from "fs";
 
 const router: Router = Router();
 
@@ -73,9 +74,12 @@ router.delete("/:id", async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const deletedProduct = await ProductModel.findByIdAndDelete(id);
+
     if (!deletedProduct) {
       return res.status(404).json({ message: "Product not found" });
     }
+    fs.unlinkSync(deletedProduct.src);
+
     res.status(204).json(); // 204 No Content
   } catch (error: any) {
     res.status(500).json({ error: error.message });

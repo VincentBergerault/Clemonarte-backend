@@ -9,7 +9,7 @@ import productRoutes from "./controllers/product";
 import contactRoutes from "./controllers/contact";
 import adminRoutes from "./controllers/admin.routes";
 
-const CLEMONARTE_FRONTEND_URL = "https://clemonarte.vbergerault.com";
+const CLEMONARTE_FRONTEND_URL = process.env.CLEMONARTE_FRONTEND_URL;
 
 const app = express();
 app.use(express.json());
