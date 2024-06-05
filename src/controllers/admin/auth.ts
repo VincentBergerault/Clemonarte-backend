@@ -52,7 +52,8 @@ router.get("/verify-token", (req: Request, res: Response) => {
     if (err) {
       return res.status(401).send({ message: "Unauthorized" });
     }
-    if (!users.find((u) => u.id === decoded.data.userID)) {
+    const user = users.find((u) => u.id === decoded.data.userID);
+    if (!user) {
       return res.status(401).send({ message: "Unauthorized" });
     }
 

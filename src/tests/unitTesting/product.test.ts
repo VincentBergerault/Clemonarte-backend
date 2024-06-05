@@ -1,6 +1,6 @@
-const request = require("supertest");
-const app = require("../../dist/server.js").default;
-const ProductModel = require("../../dist/models/product.model.js").default;
+import request from "supertest";
+import app from "../../server";
+import ProductModel from "../../models/product.model";
 
 describe("User product routes", () => {
   describe("GET /api/product", () => {
@@ -30,9 +30,9 @@ describe("User product routes", () => {
       await request(app)
         .get("/api/product")
         .then((response) => {
-          expect(response.status).toBe(200);
-          expect(Array.isArray(response.body)).toBe(true);
-          expect(response.body.length).toBe(1);
+          expect(response.status).toEqual(200);
+          expect(Array.isArray(response.body)).toEqual(true);
+          expect(response.body.length).toEqual(1);
           response.body.forEach((item) => {
             expect(item).toMatchObject({
               name: expect.any(String),
@@ -42,6 +42,17 @@ describe("User product routes", () => {
               materials: expect.arrayContaining([expect.any(String)]),
             });
           });
+        });
+    });
+    it("should return error 5xx", async () => {
+      jest
+        .spyOn(ProductModel, "find")
+        .mockImplementation((cb: any) => cb(new Error("Invalid token"), null));
+
+      await request(app)
+        .get("/api/product")
+        .then((response) => {
+          expect(response.status).toEqual(500);
         });
     });
   });

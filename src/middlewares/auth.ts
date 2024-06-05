@@ -9,6 +9,7 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
   if (process.env.NODE_ENV === "test") {
     return next();
   }
+  const users = getUsers();
   const token = req.cookies[COOKIE_NAME];
 
   if (!token) {
@@ -20,7 +21,6 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    const users = getUsers();
     const user = users.find((u) => u.id === decoded.data.userID);
     if (!user) {
       return res.status(401).json({ message: "Unauthorized" });

@@ -1,5 +1,5 @@
-const request = require("supertest");
-const app = require("../../dist/server.js").default;
+import request from "supertest";
+import app from "../../server";
 
 describe("HealthCheck route", () => {
   describe("GET /healthcheck", () => {
@@ -7,7 +7,7 @@ describe("HealthCheck route", () => {
       await request(app)
         .get("/healthcheck")
         .then((response) => {
-          expect(response.status).toBe(200);
+          expect(response.status).toEqual(200);
           expect(response.body).toHaveProperty("message");
         });
     });
@@ -23,7 +23,7 @@ describe("CORS configuration", () => {
     process.env.DEV = "true";
     process.env.CLEMONARTE_FRONTEND_URL = "http://example.com";
 
-    // Delete cache and Re import app to apply new environment variable
+    // Delete cache and Re import to apply new environment variable
     delete require.cache[require.resolve("../../dist/server.js")];
     const app = require("../../dist/server.js").default;
 
@@ -52,7 +52,7 @@ describe("CORS configuration", () => {
     process.env.DEV = "false";
     process.env.CLEMONARTE_FRONTEND_URL = "http://production.com";
 
-    // Delete cache and Re import app to apply new environment variable
+    // Delete cache and Re import to apply new environment variable
     delete require.cache[require.resolve("../../dist/server.js")];
     const app = require("../../dist/server.js").default;
 
