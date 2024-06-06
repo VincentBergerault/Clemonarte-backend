@@ -18,9 +18,9 @@ app.use(cookieParser());
 app.use(
   cors({
     origin:
-      process.env.DEV === "true"
-        ? ["http://localhost:8090"]
-        : CLEMONARTE_FRONTEND_URL,
+      process.env.NODE_ENV === "production"
+        ? CLEMONARTE_FRONTEND_URL
+        : ["http://localhost:8090"],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
   })

@@ -1,10 +1,14 @@
 import request from "supertest";
 import jwt from "jsonwebtoken";
-import app from "../../../server";
+import app from "@/src/server";
 
 const COOKIE_NAME = process.env.COOKIE_NAME;
 
+jest.mock("jsonwebtoken");
+jest.mock("bcrypt");
+
 describe("Auth routes", () => {
+  process.env.NODE_ENV = "development";
   const testusername = "testlogin";
 
   beforeEach(() => {
@@ -13,7 +17,7 @@ describe("Auth routes", () => {
 
   describe("POST /admin/auth/login", () => {
     it("should login successfully with valid credentials", async () => {
-      jest.spyOn(jwt, "sign").mockReturnValue("mocked_token");
+      jest.spyOn(jwt, "sign").mockImplementation(() => "mocked_token");
 
       await request(app)
         .post("/admin/auth/login")
@@ -57,9 +61,7 @@ describe("Auth routes", () => {
   describe("GET /verify-token", () => {
     it("should verify token successfully", async () => {
       const mockedUser = { data: { userID: 1, username: testusername } };
-      jest
-        .spyOn(jwt, "verify")
-        .mockImplementation((t, s, cb) => cb(null, mockedUser));
+      jest.spyOn(jwt, "sign").mockImplementation(() => () => mockedUser);
 
       await request(app)
         .get("/admin/auth/verify-token")
@@ -83,9 +85,8 @@ describe("Auth routes", () => {
 
     it("should return 401 for invalid token", async () => {
       jest
-        .spyOn(jwt, "verify")
-        .mockImplementation((t, s, cb) => cb(new Error("Invalid token")));
-
+        .spyOn(jwt, "sign")
+        .mockImplementation(() => () => new Error("Invalid token"));
       await request(app)
         .get("/admin/auth/verify-token")
         .set("Cookie", `${COOKIE_NAME}=invalid_token`)
@@ -97,9 +98,7 @@ describe("Auth routes", () => {
 
     it("should return 401 for invalid token because user not found", async () => {
       const mockedUser = { data: { userID: 999999, username: testusername } };
-      jest
-        .spyOn(jwt, "verify")
-        .mockImplementation((t, s, cb) => cb(null, mockedUser));
+      jest.spyOn(jwt, "verify").mockImplementation(() => () => mockedUser);
 
       await request(app)
         .get("/admin/auth/verify-token")

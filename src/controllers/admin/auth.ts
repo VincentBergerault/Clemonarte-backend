@@ -1,6 +1,6 @@
 import express, { Request, Response, Router } from "express";
-import { IUser } from "../../utils/types";
-import getUsers from "../../config/users";
+import { IUser } from "@/src/types/types";
+import { getUsers } from "@/src/config/users";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 

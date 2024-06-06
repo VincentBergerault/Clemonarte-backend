@@ -1,11 +1,11 @@
 import bcrypt from "bcrypt";
-import { IUser } from "../utils/types";
+import { IUser } from "@/src/types/types";
 
 const ADMIN_LOGIN = process.env.ADMIN_LOGIN as string;
 const ADMIN_PWD = process.env.ADMIN_PWD as string;
 
-const getUsers = (): IUser[] => {
-  if (process.env.PROD) {
+export const getUsers = (): IUser[] => {
+  if (process.env.NODE_ENV === "production") {
     return [
       {
         id: 19749871374,
@@ -25,5 +25,3 @@ const getUsers = (): IUser[] => {
     ];
   }
 };
-
-export default getUsers;

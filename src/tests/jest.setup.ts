@@ -1,7 +1,8 @@
-const { connect, closeDatabase, clearDatabase } = require('./tests/mongoMemoryServer');
+import { connect, closeDatabase, clearDatabase } from "./mongoMemoryServer";
 
 beforeAll(async () => {
   await connect();
+  process.env.NODE_ENV = "test";
 });
 
 afterEach(async () => {

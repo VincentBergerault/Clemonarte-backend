@@ -1,7 +1,7 @@
 import { Router, Request, Response } from "express";
 import multer from "multer";
-import { storage } from "../../config/storage";
-import ProductModel from "../../models/product.model"; // Ensure this is correctly typed in your model file
+import { storage } from "@/src/config/storage";
+import ProductModel from "@/src/models/product.model"; // Ensure this is correctly typed in your model file
 import fs from "fs";
 
 const router: Router = Router();

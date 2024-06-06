@@ -1,6 +1,7 @@
 import request from "supertest";
 import app from "../../server";
-import ProductModel from "../../models/product.model";
+import ProductModel from "@/src/models/product.model";
+import { Product } from "@/src/types/types";
 
 describe("User product routes", () => {
   describe("GET /api/product", () => {
@@ -27,33 +28,28 @@ describe("User product routes", () => {
       await product1.save();
       await product2.save();
 
-      await request(app)
-        .get("/api/product")
-        .then((response) => {
-          expect(response.status).toEqual(200);
-          expect(Array.isArray(response.body)).toEqual(true);
-          expect(response.body.length).toEqual(1);
-          response.body.forEach((item) => {
-            expect(item).toMatchObject({
-              name: expect.any(String),
-              price: expect.any(Number),
-              src: expect.any(String),
-              description: expect.any(String),
-              materials: expect.arrayContaining([expect.any(String)]),
-            });
-          });
+      const response = await request(app).get("/api/product");
+      expect(response.status).toEqual(200);
+      expect(Array.isArray(response.body)).toEqual(true);
+      expect(response.body.length).toEqual(1);
+      response.body.forEach((item: Product) => {
+        expect(item).toMatchObject({
+          name: expect.any(String),
+          price: expect.any(Number),
+          src: expect.any(String),
+          description: expect.any(String),
+          materials: expect.arrayContaining([expect.any(String)]),
         });
+      });
     });
-    it("should return error 5xx", async () => {
-      jest
-        .spyOn(ProductModel, "find")
-        .mockImplementation((cb: any) => cb(new Error("Invalid token"), null));
 
-      await request(app)
-        .get("/api/product")
-        .then((response) => {
-          expect(response.status).toEqual(500);
-        });
+    it("should return error 5xx", async () => {
+      jest.spyOn(ProductModel, "find").mockImplementation(() => {
+        throw new Error("Database error");
+      });
+
+      const response = await request(app).get("/api/product");
+      expect(response.status).toEqual(500);
     });
   });
 });

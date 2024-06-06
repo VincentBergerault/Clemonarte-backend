@@ -1,11 +1,14 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import getUsers from "../config/users"; // Adjust the path as needed
+import { getUsers } from "@/src/config/users"; // Adjust the path as needed
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
 const COOKIE_NAME = process.env.COOKIE_NAME as string;
 
 const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
+  console.log("test env");
+
+  console.log(process.env.NODE_ENV);
   if (process.env.NODE_ENV === "test") {
     return next();
   }
@@ -26,6 +29,7 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
+    // TODO res.auth = true;
     next();
   });
 };

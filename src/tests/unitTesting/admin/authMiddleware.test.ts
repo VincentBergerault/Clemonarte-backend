@@ -1,10 +1,12 @@
 import request from "supertest";
 import jwt from "jsonwebtoken";
-import app from "../../../server";
-import users from "../../../config/users";
+import app from "@/src/server";
+import * as users from "@/src/config/users";
 
-const COOKIE_NAME = process.env.COOKIE_NAME;
-process.env.NODE_ENV = "!test";
+const COOKIE_NAME = process.env.COOKIE_NAME!;
+
+jest.mock("jsonwebtoken");
+jest.mock("bcrypt");
 
 describe("Auth routes", () => {
   const testusername = "testlogin";
@@ -15,51 +17,43 @@ describe("Auth routes", () => {
 
   describe("Test Auth Middleware", () => {
     it("should return 401 for missing token", async () => {
-      await request(app)
-        .get("/admin/product")
-        .then((response) => {
-          expect(response.status).toEqual(401);
-          expect(response.body).toHaveProperty("message", "Unauthorized");
-        });
+      process.env.NODE_ENV = "not-test";
+      const response = await request(app).get("/admin/product");
+      expect(response.status).toEqual(401);
+      expect(response.body).toHaveProperty("message", "Unauthorized");
     });
 
     it("should return 401 for invalid token", async () => {
+      process.env.NODE_ENV = "not-test";
       jest
         .spyOn(jwt, "verify")
         .mockImplementation((t, s, cb) => cb(new Error("Invalid token"), null));
 
-      await request(app)
+      const response = await request(app)
         .get("/admin/product")
-        .set("Cookie", `${COOKIE_NAME}=invalid_token`)
-        .then((response) => {
-          expect(response.status).toEqual(401);
-          expect(response.body).toHaveProperty("message", "Unauthorized");
-        });
+        .set("Cookie", `${COOKIE_NAME}=invalid_token`);
+      expect(response.status).toEqual(401);
+      expect(response.body).toHaveProperty("message", "Unauthorized");
     });
 
     it("should return 401 for valid token but non-existent user", async () => {
+      process.env.NODE_ENV = "not-test";
       const mockedUser = { data: { userID: 1, username: "wrongUser" } };
-      jest
-        .spyOn(jwt, "verify")
-        .mockImplementation((t, s, cb) => cb(null, mockedUser));
-      jest.spyOn(users).mockImplementation(() => []);
+      jest.spyOn(jwt, "verify").mockImplementation(() => mockedUser);
+      jest.spyOn(users, "getUsers").mockImplementation(() => []);
 
-      await request(app)
+      const response = await request(app)
         .get("/admin/product")
-        .set("Cookie", `${COOKIE_NAME}=valid_token`)
-        .then((response) => {
-          expect(response.status).toEqual(401);
-          expect(response.body).toHaveProperty("message", "Unauthorized");
-        });
+        .set("Cookie", `${COOKIE_NAME}=valid_token`);
+      expect(response.status).toEqual(401);
+      expect(response.body).toHaveProperty("message", "Unauthorized");
     });
 
     it("should return 200 for valid token and existing user", async () => {
+      process.env.NODE_ENV = "not-test";
       const mockedUser = { data: { userID: 1, username: testusername } };
-      jest
-        .spyOn(jwt, "verify")
-        .mockImplementation((t, s, cb) => cb(null, mockedUser));
-
-      jest.spyOn(users, "default").mockImplementation(() => [
+      jest.spyOn(jwt, "verify").mockImplementation(() => mockedUser);
+      jest.spyOn(users, "getUsers").mockImplementation(() => [
         {
           id: 1,
           username: testusername,
@@ -68,12 +62,10 @@ describe("Auth routes", () => {
         },
       ]);
 
-      await request(app)
+      const response = await request(app)
         .get("/admin/product")
-        .set("Cookie", `${COOKIE_NAME}=valid_token`)
-        .then((response) => {
-          expect(response.status).toEqual(200);
-        });
+        .set("Cookie", `${COOKIE_NAME}=valid_token`);
+      expect(response.status).toEqual(200);
     });
   });
 });

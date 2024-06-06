@@ -5,8 +5,8 @@
   "main": "index.ts",
   "scripts": {
     "build": "tsc",
-    "pretest": "npm run build",
-    "test": "jest --verbose",
+    "test": "jest",
+    "test:verbose": "jest --verbose",
     "start": "node dist/server.js",
     "dev": "nodemon --exec ts-node src/index.ts"
   },
@@ -46,6 +46,10 @@
     "supertest": "^7.0.0",
     "ts-jest": "^29.1.4",
     "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.4.5"
+  },
+  "imports": {
+    "#root-folder/*": "./src/*.js"
   }
 }

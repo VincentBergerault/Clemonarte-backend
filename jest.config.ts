@@ -1,15 +1,18 @@
-import { transform } from "typescript";
+import "tsconfig-paths/register";
 
 module.exports = {
   clearMocks: true,
-  coverageProvider: "v8",
+  preset: "ts-jest",
+  testEnvironment: "node",
   moduleFileExtensions: ["js", "jsx", "ts", "tsx", "json", "node"],
-  testMatch: ["**/?(*.)+(test).ts?(x)"],
+  testMatch: ["**/tests/**/*.test.ts"],
   transform: {
     "^.\\.(ts|tsx)$": "ts-jest",
   },
-
-  setupFilesAfterEnv: ["./jest.setup.ts"],
+  moduleNameMapper: {
+    "@/src/(.*)": "<rootDir>/src/$1",
+  },
+  setupFilesAfterEnv: ["<rootDir>/src/tests/jest.setup.ts"],
   collectCoverage: true,
   coverageDirectory: "coverage",
   coverageReporters: ["text", "lcov"],

@@ -1,8 +1,8 @@
-import { Router, Request, Response } from "express";
-import adminAuthRoutes from "./admin/auth";
-import adminProductRoutes from "./admin/product";
+import { Router } from "express";
+import adminAuthRoutes from "@/src/controllers/admin/auth";
+import adminProductRoutes from "@/src/controllers/admin/product";
 
-import authMiddleware from "../middlewares/auth";
+import authMiddleware from "@/src/middlewares/auth";
 
 const router: Router = Router();
 
