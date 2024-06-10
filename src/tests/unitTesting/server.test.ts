@@ -22,7 +22,7 @@ describe("CORS configuration", () => {
     process.env.CLEMONARTE_FRONTEND_URL = "http://example.com";
 
     // Re-import to apply new environment variable
-    const app = (await import("../../server")).default as Application;
+    const app = (await import("@/src/server")).default as Application;
 
     const responseLocalhost = await request(app)
       .get("/healthcheck")
@@ -46,7 +46,7 @@ describe("CORS configuration", () => {
     process.env.CLEMONARTE_FRONTEND_URL = "http://production.com";
 
     // Re-import to apply new environment variable
-    const app = (await import("../../server")).default as Application;
+    const app = (await import("@/src/server")).default as Application;
 
     const responseProduction = await request(app)
       .get("/healthcheck")

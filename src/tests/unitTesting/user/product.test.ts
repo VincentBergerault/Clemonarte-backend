@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../../server";
+import app from "@/src/server";
 import ProductModel from "@/src/models/product.model";
 import { Product } from "@/src/types/types";
 

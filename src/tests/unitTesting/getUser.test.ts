@@ -21,7 +21,7 @@ describe("getUsers", () => {
     jest.spyOn(bcrypt, "hashSync").mockImplementation(() => mockHash);
 
     // Re-import to apply new environment variable
-    const { getUsers } = await import("../../config/users");
+    const { getUsers } = await import("@/src/config/users");
 
     const user = getUsers();
 
@@ -40,7 +40,7 @@ describe("getUsers", () => {
     process.env.NODE_ENV = "test";
 
     // Re-import to apply new environment variable
-    const { getUsers } = await import("../../config/users");
+    const { getUsers } = await import("@/src/config/users");
 
     const mockHash = "hashed_test_password";
     jest.spyOn(bcrypt, "hashSync").mockImplementation(() => mockHash);
