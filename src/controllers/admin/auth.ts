@@ -1,17 +1,12 @@
 import express, { Request, Response, Router } from "express";
 import { IUser } from "@/src/types/types";
 import { getUsers } from "@/src/config/users";
+import { generateToken, verifyToken } from "@/src/config/authScripts";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 
 const router: Router = express.Router();
 
-const JWT_SECRET = process.env.JWT_SECRET as string;
 const COOKIE_NAME = process.env.COOKIE_NAME as string;
-
-const generateToken = (data: any) => {
-  return jwt.sign({ data }, JWT_SECRET, { expiresIn: "1d" });
-};
 
 const users: IUser[] = getUsers();
 
@@ -48,20 +43,16 @@ router.get("/verify-token", (req: Request, res: Response) => {
     return res.status(401).send({ message: "Unauthorized" });
   }
 
-  jwt.verify(token, JWT_SECRET, (err: any, decoded: any) => {
-    if (err) {
-      return res.status(401).send({ message: "Unauthorized" });
-    }
-    const user = users.find((u) => u.id === decoded.data.userID);
-    if (!user) {
-      return res.status(401).send({ message: "Unauthorized" });
-    }
-
-    res.json({
-      message: "Token is valid",
-      user: { username: decoded.data.username },
+  verifyToken(token)
+    .then(({ status, decoded, user }) => {
+      res.status(status).send({
+        message: "Token is valid",
+        user: { username: decoded.data.username },
+      });
+    })
+    .catch(({ status, message }) => {
+      res.status(status).json({ message });
     });
-  });
 });
 
 router.get("/logout", (req: Request, res: Response) => {

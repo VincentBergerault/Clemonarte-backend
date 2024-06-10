@@ -1,14 +1,11 @@
 import request from "supertest";
-import jwt from "jsonwebtoken";
 import app from "@/src/server";
+import { generateToken } from "@/src/config/authScripts";
 
 const COOKIE_NAME = process.env.COOKIE_NAME;
 
-jest.mock("jsonwebtoken");
-jest.mock("bcrypt");
-
 describe("Auth routes", () => {
-  process.env.NODE_ENV = "development";
+  process.env.NODE_ENV = "not-test";
   const testusername = "testlogin";
 
   beforeEach(() => {
@@ -17,17 +14,13 @@ describe("Auth routes", () => {
 
   describe("POST /admin/auth/login", () => {
     it("should login successfully with valid credentials", async () => {
-      jest.spyOn(jwt, "sign").mockImplementation(() => "mocked_token");
-
       await request(app)
         .post("/admin/auth/login")
         .send({ username: testusername, password: "testpwd" })
         .then((response) => {
           expect(response.status).toEqual(200);
           expect(response.body).toHaveProperty("message", "Logged in!");
-          expect(response.headers["set-cookie"][0]).toContain(
-            `${COOKIE_NAME}=mocked_token`
-          );
+          expect(response.headers["set-cookie"][0]).toContain(`${COOKIE_NAME}`);
         });
     });
 
@@ -60,12 +53,10 @@ describe("Auth routes", () => {
 
   describe("GET /verify-token", () => {
     it("should verify token successfully", async () => {
-      const mockedUser = { data: { userID: 1, username: testusername } };
-      jest.spyOn(jwt, "sign").mockImplementation(() => () => mockedUser);
-
+      const userJwt = generateToken({ userID: 1, username: testusername });
       await request(app)
         .get("/admin/auth/verify-token")
-        .set("Cookie", `${COOKIE_NAME}=valid_token`)
+        .set("Cookie", `${COOKIE_NAME}=${userJwt}`)
         .then((response) => {
           expect(response.status).toEqual(200);
           expect(response.body).toHaveProperty("message", "Token is valid");
@@ -84,9 +75,6 @@ describe("Auth routes", () => {
     });
 
     it("should return 401 for invalid token", async () => {
-      jest
-        .spyOn(jwt, "sign")
-        .mockImplementation(() => () => new Error("Invalid token"));
       await request(app)
         .get("/admin/auth/verify-token")
         .set("Cookie", `${COOKIE_NAME}=invalid_token`)
@@ -97,12 +85,10 @@ describe("Auth routes", () => {
     });
 
     it("should return 401 for invalid token because user not found", async () => {
-      const mockedUser = { data: { userID: 999999, username: testusername } };
-      jest.spyOn(jwt, "verify").mockImplementation(() => () => mockedUser);
-
+      const userJwt = generateToken({ userID: 999999, username: testusername });
       await request(app)
         .get("/admin/auth/verify-token")
-        .set("Cookie", `${COOKIE_NAME}=invalid_token`)
+        .set("Cookie", `${COOKIE_NAME}=${userJwt}`)
         .then((response) => {
           expect(response.status).toEqual(401);
           expect(response.body).toHaveProperty("message", "Unauthorized");
