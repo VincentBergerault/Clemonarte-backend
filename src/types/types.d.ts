@@ -15,6 +15,13 @@ export type Product = {
   materials: Array<string>;
 };
 
+export type Image = {
+  name: string;
+  productID: string;
+  content: string;
+  extension: string;
+};
+
 export type ClientProduct = {
   name: string;
   price: number;

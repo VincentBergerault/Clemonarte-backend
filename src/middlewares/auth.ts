@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { verifyToken } from "@/src/config/authScripts";
+import { verifyToken } from "@/src/config/authFunctions";
 
 const COOKIE_NAME = process.env.COOKIE_NAME as string;
 

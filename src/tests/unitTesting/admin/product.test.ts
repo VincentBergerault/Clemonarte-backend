@@ -4,6 +4,7 @@ import fs from "fs";
 import mongoose from "mongoose";
 import app from "@/src/server";
 import ProductModel from "@/src/models/product.model";
+import ImageModel from "@/src/models/image.model";
 import { Product } from "@/src/types/types";
 
 describe("Admin product routes", () => {
@@ -76,6 +77,15 @@ describe("Admin product routes", () => {
       };
       const imagePath = path.join(__dirname, "../../assets/rickroll.jpg");
 
+      jest.spyOn(ProductModel.prototype, "save").mockImplementationOnce(() => {
+        return {
+          ...productData,
+          _id: "mocked-id",
+          src: "mocked-path",
+        };
+      });
+      jest.spyOn(ImageModel.prototype, "save").mockResolvedValue({});
+
       const response = await request(app)
         .post("/admin/product")
         .field("name", productData.name)
@@ -99,8 +109,32 @@ describe("Admin product routes", () => {
       expect(fs.existsSync(createdImagePath)).toEqual(false);
     });
 
-    it("should return 500 if there's a server error", async () => {
+    it("should return 500 if there's a server error with ProductModel", async () => {
       const mockSave = jest.spyOn(ProductModel.prototype, "save");
+      mockSave.mockImplementationOnce(() => {
+        throw new Error("Internal Server Error");
+      });
+
+      const imagePath = path.join(__dirname, "../../assets/rickroll.jpg");
+
+      const response = await request(app)
+        .post("/admin/product")
+        .field("name", "test1")
+        .field("price", "2")
+        .field("visible", "false")
+        .field("description", "test1")
+        .field("authorDescription", "test1")
+        .field("materials", JSON.stringify(["paint", "canvas"]))
+        .attach("image", imagePath);
+
+      expect(response.status).toEqual(500);
+      expect(response.body.error).toEqual("Internal Server Error");
+
+      mockSave.mockRestore();
+    });
+
+    it("should return 500 if there's a server error with ImageModel", async () => {
+      const mockSave = jest.spyOn(ImageModel.prototype, "save");
       mockSave.mockImplementationOnce(() => {
         throw new Error("Internal Server Error");
       });

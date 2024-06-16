@@ -1,17 +1,6 @@
 import bcrypt from "bcrypt";
 
 describe("getUsers", () => {
-  const originalEnv = process.env;
-
-  beforeEach(() => {
-    jest.clearAllMocks();
-    process.env = { ...originalEnv };
-  });
-
-  afterAll(() => {
-    process.env = originalEnv;
-  });
-
   it("should return admin user in production environment", async () => {
     process.env.NODE_ENV = "production";
     process.env.ADMIN_LOGIN = "adminuser";
