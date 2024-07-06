@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 import { Image } from "@/src/types/types";
 
 const ImageSchema = new Schema<Image>({
-  name: { type: String, required: true, unique: true },
+  name: { type: String, required: true },
   productID: { type: String, required: true },
   content: { type: String, required: true },
   extension: { type: String, required: true },

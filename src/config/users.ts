@@ -5,7 +5,7 @@ const ADMIN_LOGIN = process.env.ADMIN_LOGIN as string;
 const ADMIN_PWD = process.env.ADMIN_PWD as string;
 
 export const getUsers = (): IUser[] => {
-  if (process.env.NODE_ENV === "production") {
+  if (process.env.NODE_ENV !== "test") {
     return [
       {
         id: 19749871374,

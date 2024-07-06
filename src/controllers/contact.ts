@@ -8,12 +8,11 @@ const MAIL_EMAIL = process.env.MAIL_EMAIL;
 const PWD_EMAIL = process.env.PWD_EMAIL;
 
 const sanitizeInput = (input: string): string => {
-  return sanitize(input); // Using sanitize-html if it fits your requirements or maintain your regex
+  return sanitize(input);
 };
 
 router.post("/", async (req: Request, res: Response) => {
   try {
-    // Extract and sanitize form data from the request body
     const name = sanitizeInput(req.body.name);
     const email = sanitizeInput(req.body.email);
     const message = sanitizeInput(req.body.message);

@@ -1,5 +1,5 @@
 import express, { Request, Response, Router } from "express";
-import ProductModel from "@/src/models/product.model"; // Assuming default export is used in the model
+import ProductModel from "@/src/models/product.model";
 import { ClientProduct, Product } from "@/src/types/types";
 
 const router: Router = express.Router();

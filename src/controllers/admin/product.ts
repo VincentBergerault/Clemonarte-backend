@@ -1,7 +1,6 @@
 import { Router, Request, Response } from "express";
 import multer from "multer";
 import { storage } from "@/src/config/storage";
-import { imageToBlob } from "@/src/config/handleImages";
 import ProductModel from "@/src/models/product.model";
 import ImageModel from "@/src/models/image.model";
 import fs from "fs";
@@ -26,7 +25,6 @@ router.post(
 
     try {
       const { body } = req;
-
       const newProduct = new ProductModel({
         ...body,
         src: image,
@@ -34,12 +32,13 @@ router.post(
 
       await newProduct.save();
       try {
-        const imageBlob = await imageToBlob(image);
+        const imageBuffer = await fs.readFileSync(image);
+
         const newImage = new ImageModel({
           name: newProduct.name,
           productID: newProduct._id,
-          content: imageBlob.blob,
-          extension: imageBlob.mimeType,
+          content: imageBuffer,
+          extension: req.file.mimetype,
         });
         await newImage.save();
       } catch (error: any) {
@@ -47,7 +46,9 @@ router.post(
       }
       res.status(201).json(newProduct);
     } catch (error: any) {
-      fs.unlinkSync(image);
+      if (image) {
+        fs.unlinkSync(image);
+      }
       res.status(500).json({ error: error.message });
     }
   }
