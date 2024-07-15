@@ -1,4 +1,4 @@
-declare module "@/src/*" {
+declare module "@/*" {
   const content: any;
   export default content;
 }

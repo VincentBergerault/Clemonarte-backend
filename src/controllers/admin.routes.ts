@@ -1,9 +1,9 @@
 import { Router } from "express";
-import adminAuthRoutes from "@/src/controllers/admin/auth";
-import adminProductRoutes from "@/src/controllers/admin/product";
-import adminImageRoutes from "@/src/controllers/admin/image";
+import adminAuthRoutes from "@/controllers/admin/auth";
+import adminProductRoutes from "@/controllers/admin/product";
+import adminImageRoutes from "@/controllers/admin/image";
 
-import authMiddleware from "@/src/middlewares/auth";
+import authMiddleware from "@/middlewares/auth";
 
 const router: Router = Router();
 

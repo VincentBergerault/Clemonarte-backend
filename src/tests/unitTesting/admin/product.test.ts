@@ -2,10 +2,10 @@ import request from "supertest";
 import path from "path";
 import fs from "fs";
 import mongoose from "mongoose";
-import app from "@/src/server";
-import ProductModel from "@/src/models/product.model";
-import ImageModel from "@/src/models/image.model";
-import { Product } from "@/src/types/types";
+import app from "@/server";
+import ProductModel from "@/models/product.model";
+import ImageModel from "@/models/image.model";
+import { Product } from "@/types/types";
 
 describe("Admin product routes", () => {
   beforeEach(() => {

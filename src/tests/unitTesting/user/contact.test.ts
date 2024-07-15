@@ -1,6 +1,6 @@
 import request from "supertest";
 import nodemailer from "nodemailer";
-import app from "@/src/server";
+import app from "@/server";
 
 jest.mock("nodemailer");
 jest.mock("sanitize-html", () => (input: string) => input);

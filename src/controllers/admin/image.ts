@@ -1,5 +1,5 @@
 import { Router, Request, Response } from "express";
-import ImageModel from "@/src/models/image.model";
+import ImageModel from "@/models/image.model";
 
 const router: Router = Router();
 

@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { Image } from "@/src/types/types";
+import { Image } from "@/types/types";
 
 const ImageSchema = new Schema<Image>({
   name: { type: String, required: true },

@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { IUser } from "@/src/types/types";
+import { IUser } from "@/types/types";
 
 const ADMIN_LOGIN = process.env.ADMIN_LOGIN as string;
 const ADMIN_PWD = process.env.ADMIN_PWD as string;

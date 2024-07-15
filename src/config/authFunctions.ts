@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { getUsers } from "@/src/config/users"; // Adjust the path as needed
+import { getUsers } from "@/config/users"; // Adjust the path as needed
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
 

@@ -1,7 +1,7 @@
 import request from "supertest";
-import app from "@/src/server";
-import ProductModel from "@/src/models/product.model";
-import { Product } from "@/src/types/types";
+import app from "@/server";
+import ProductModel from "@/models/product.model";
+import { Product } from "@/types/types";
 
 describe("User product routes", () => {
   describe("GET /api/product", () => {

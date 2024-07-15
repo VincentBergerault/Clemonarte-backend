@@ -10,7 +10,7 @@ module.exports = {
     "^.\\.(ts|tsx)$": "ts-jest",
   },
   moduleNameMapper: {
-    "@/src/(.*)": "<rootDir>/src/$1",
+    "@/(.*)": "<rootDir>/src/$1",
   },
   setupFilesAfterEnv: ["<rootDir>/src/tests/jest.setup.ts"],
   collectCoverage: true,

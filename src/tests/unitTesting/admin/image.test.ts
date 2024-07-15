@@ -1,7 +1,7 @@
 import request from "supertest";
-import app from "@/src/server";
-import ImageModel from "@/src/models/image.model";
-import { Image } from "@/src/types/types";
+import app from "@/server";
+import ImageModel from "@/models/image.model";
+import { Image } from "@/types/types";
 
 describe("Admin product routes", () => {
   beforeEach(() => {

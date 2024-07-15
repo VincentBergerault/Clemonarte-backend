@@ -1,8 +1,8 @@
 import { Router, Request, Response } from "express";
 import multer from "multer";
-import { storage } from "@/src/config/storage";
-import ProductModel from "@/src/models/product.model";
-import ImageModel from "@/src/models/image.model";
+import { storage } from "@/config/storage";
+import ProductModel from "@/models/product.model";
+import ImageModel from "@/models/image.model";
 import fs from "fs";
 
 const router: Router = Router();

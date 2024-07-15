@@ -1,5 +1,5 @@
 import { Schema, model, Document } from "mongoose";
-import { AboutSection } from "@/src/types/types";
+import { AboutSection } from "@/types/types";
 
 const AboutSchema = new Schema<AboutSection>({
   title: { type: String, required: true },

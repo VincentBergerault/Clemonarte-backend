@@ -1,7 +1,7 @@
 import express, { Request, Response, Router } from "express";
-import { IUser } from "@/src/types/types";
-import { getUsers } from "@/src/config/users";
-import { generateToken, verifyToken } from "@/src/config/authFunctions";
+import { IUser } from "@/types/types";
+import { getUsers } from "@/config/users";
+import { generateToken, verifyToken } from "@/config/authFunctions";
 import bcrypt from "bcrypt";
 
 const router: Router = express.Router();

@@ -1,5 +1,5 @@
 import { Schema, model, Document } from "mongoose";
-import { Product } from "@/src/types/types";
+import { Product } from "@/types/types";
 
 const ProductSchema = new Schema<Product>({
   name: { type: String, required: true },

@@ -1,5 +1,5 @@
 import { Router, Request, Response } from "express";
-import AboutModel from "@/src/models/about.model";
+import AboutModel from "@/models/about.model";
 
 const router: Router = Router();
 

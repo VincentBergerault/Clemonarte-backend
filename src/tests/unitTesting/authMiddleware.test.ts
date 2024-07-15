@@ -1,7 +1,7 @@
 import request from "supertest";
-import app from "@/src/server";
-import * as users from "@/src/config/users";
-import { generateToken } from "@/src/config/authFunctions";
+import app from "@/server";
+import * as users from "@/config/users";
+import { generateToken } from "@/config/authFunctions";
 
 const COOKIE_NAME = process.env.COOKIE_NAME;
 
