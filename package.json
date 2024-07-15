@@ -7,7 +7,7 @@
     "build": "tsc",
     "test": "jest",
     "test:verbose": "jest --verbose",
-    "start": "ts-node -r tsconfig-paths/register src/index.ts",
+    "start": "node dist/index.js",
     "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/index.ts"
   },
   "author": "",
