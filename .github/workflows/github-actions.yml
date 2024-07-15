@@ -10,8 +10,8 @@ jobs:
         uses: appleboy/ssh-action@master
         env:
           CLEMONARTE_BACKEND_URL: ${{ vars.CLEMONARTE_BACKEND_URL }}
-          PORT: ${{ vars.PORT }}
-          MONGO_URL: ${{ vars.MONGO_URL }}
+          PORT: ${{ secrets.APP_PORT }}
+          MONGO_URL: ${{ secrets.MONGO_URL }}
           PROD: true
         with:
           host: ${{ secrets.HOST }}

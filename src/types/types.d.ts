@@ -29,3 +29,10 @@ export type ClientProduct = {
   description: string;
   materials: Array<string>;
 };
+
+export type AboutSection = {
+  title: string;
+  content: string;
+  image: string;
+  index: number;
+};
